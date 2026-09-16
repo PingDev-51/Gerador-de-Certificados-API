@@ -3,15 +3,11 @@ using MediatR;
 
 namespace GeradorCertificados.Aplicacao.Compartilhado;
 
-public sealed record AutenticarClienteCommand(
+public sealed record AutenticarUsuarioCommand(
     string Email,
     string Senha
 ) : IRequest<Result<AccessTokenDoUsuarioDto>>;
 
-public sealed record AutenticarEstabelecimentoCommand(
-    string Email,
-    string Senha
-) : IRequest<Result<AccessTokenDoUsuarioDto>>;
 
 public sealed record AccessTokenDoUsuarioDto(
     Guid UsuarioId,

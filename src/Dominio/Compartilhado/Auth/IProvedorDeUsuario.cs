@@ -4,7 +4,6 @@ public interface IProvedorDeUsuario
 {
     Guid? Id { get; }
     string? Email { get; }
+    string? Senha { get; }
     bool EstaAutenticado { get; }
-
-    bool PossuiTipo(TipoUsuario tipoUsuario);
 }
