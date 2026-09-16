@@ -13,8 +13,7 @@ public sealed class JwtProvider(IOptions<JwtOptions> jwtOptions) : IEmissorDeTok
 
     public AccessToken CriarToken(
         Guid usuarioId,
-        string email,
-        TipoUsuario tipoUsuario
+        string email, string senha
     )
     {
         DateTime dataCriacao = DateTime.UtcNow;
@@ -22,8 +21,7 @@ public sealed class JwtProvider(IOptions<JwtOptions> jwtOptions) : IEmissorDeTok
 
         List<Claim> claims = [
             new(ClaimTypes.NameIdentifier, usuarioId.ToString()),
-            new(ClaimTypes.Email, email),
-            new(ClaimTypes.Role, tipoUsuario.ToString()),
+            new(ClaimTypes.Email, email)
         ];
 
         SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(options.Key));
@@ -42,4 +40,5 @@ public sealed class JwtProvider(IOptions<JwtOptions> jwtOptions) : IEmissorDeTok
 
         return new AccessToken(accessToken, dataExpiracao);
     }
+
 }

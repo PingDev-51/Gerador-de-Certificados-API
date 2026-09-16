@@ -33,8 +33,7 @@ public sealed class ObterUsuarioPorIdQueryHandler(
         return Result.Ok(
             new UsuarioDto(
                 query.UsuarioId,
-                provedorDeUsuario.Email!,
-                provedorDeUsuario.Senha!
+                provedorDeUsuario.Email!
             )
         );
     }

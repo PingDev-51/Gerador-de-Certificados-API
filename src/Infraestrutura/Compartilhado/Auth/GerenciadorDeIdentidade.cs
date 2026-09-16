@@ -10,8 +10,7 @@ public sealed class GerenciadorDeIdentidade(
     public async Task<UsuarioDto> CadastrarAsync(
         Guid usuarioId,
         string email,
-        string senha,
-        TipoUsuario tipo
+        string senha
     )
     {
         var usuario = new IdentityUser<Guid>
@@ -26,25 +25,18 @@ public sealed class GerenciadorDeIdentidade(
         if (!resultadoUsuario.Succeeded)
             throw CriarErro(resultadoUsuario);
 
-        var resultadoPapel = await userManager.AddToRoleAsync(usuario, tipo.ToString());
-
-        if (!resultadoPapel.Succeeded)
-        {
-            await userManager.DeleteAsync(usuario);
-
-            throw CriarErro(resultadoPapel);
-        }
-
-        return new UsuarioDto(usuario.Id, usuario.Email);
+        return new UsuarioDto(
+            usuario.Id,
+            usuario.Email!
+        );
     }
 
     public async Task<UsuarioDto?> ChecarValidadeDeSenhaAsync(
         string email,
-        string senha,
-        TipoUsuario tipo
+        string senha
     )
     {
-        var usuario = await userManager.FindByEmailAsync(email);
+        var usuario = await userManager.FindByEmailAsync(email.Trim());
 
         if (usuario is null || await userManager.IsLockedOutAsync(usuario))
             return null;
@@ -56,18 +48,20 @@ public sealed class GerenciadorDeIdentidade(
             return null;
         }
 
-        if (!await userManager.IsInRoleAsync(usuario, tipo.ToString()))
-            return null;
-
         if (usuario.AccessFailedCount > 0)
             await userManager.ResetAccessFailedCountAsync(usuario);
 
-        return new UsuarioDto(usuario.Id, usuario.Email!);
+        return new UsuarioDto(
+            usuario.Id,
+            usuario.Email!
+        );
     }
 
     public async Task ExcluirAsync(Guid usuarioId)
     {
-        var usuario = await userManager.FindByIdAsync(usuarioId.ToString());
+        var usuario = await userManager.FindByIdAsync(
+            usuarioId.ToString()
+        );
 
         if (usuario is not null)
             await userManager.DeleteAsync(usuario);
@@ -76,7 +70,7 @@ public sealed class GerenciadorDeIdentidade(
     private static Exception CriarErro(IdentityResult resultado)
     {
         if (resultado.Errors.Any(
-                     erro => erro.Code is "DuplicateEmail" or "DuplicateUserName"))
+            erro => erro.Code is "DuplicateEmail" or "DuplicateUserName"))
         {
             return new ConflitoDeIdentidadeException(
                 "Já existe um usuário cadastrado com este email."
@@ -85,10 +79,16 @@ public sealed class GerenciadorDeIdentidade(
 
         var erro = resultado.Errors.First();
 
-        string campo = erro.Code.StartsWith("Password", StringComparison.Ordinal)
+        string campo = erro.Code.StartsWith(
+            "Password",
+            StringComparison.Ordinal
+        )
             ? "Senha"
             : "Email";
 
-        return new ValidacaoDeIdentidadeException(campo, erro.Description);
+        return new ValidacaoDeIdentidadeException(
+            campo,
+            erro.Description
+        );
     }
 }

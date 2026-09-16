@@ -10,7 +10,7 @@ public sealed class ValidacaoDeIdentidadeException(
 
 public sealed class ConflitoDeIdentidadeException(string mensagem) : Exception(mensagem);
 
-public sealed record UsuarioDto(Guid Id, string Email, string Senha);
+public sealed record UsuarioDto(Guid Id, string Email);
 
 public interface IGerenciadorDeIdentidade
 {
