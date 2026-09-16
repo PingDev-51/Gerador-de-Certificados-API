@@ -16,6 +16,11 @@ public class SolicitacaoCertificados : EntidadeBase<SolicitacaoCertificados>
 
     public List<Certificado> Certificados { get; private set; } = [];
 
+    public SolicitacaoCertificados()
+    {
+        
+    }
+
     public SolicitacaoCertificados(
         Guid cursoId,
         List<string> nomesAlunos)
@@ -86,13 +91,4 @@ public class SolicitacaoCertificados : EntidadeBase<SolicitacaoCertificados>
 
         return erros;
     }
-}
-
-public enum StatusGeracaoCertificados
-{
-    Pendente,
-    GerandoCertificados,
-    GerandoZip,
-    Concluido,
-    Falha
 }

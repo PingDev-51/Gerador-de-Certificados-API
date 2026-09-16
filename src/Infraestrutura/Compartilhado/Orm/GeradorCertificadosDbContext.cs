@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using GeradorCertificados.Dominio.Compartilhado.Auth;
+using GeradorCertificados.Dominio.Modulos.GeracaoCertificado;
 
 namespace GeradorCertificados.Infraestrutura.Compartilhado.Orm;
 
@@ -10,6 +11,8 @@ public sealed class GeradorCertificadosDbContext(
     IProvedorDeUsuario? provedorDeUsuario = null
 ) : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>(options)
 {
+    public DbSet<Certificado> Certificados => Set<Certificado>();
+    public DbSet<SolicitacaoCertificados> SolicitacaoCertificados => Set<SolicitacaoCertificados>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

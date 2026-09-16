@@ -12,6 +12,8 @@ public class Curso : EntidadeBase<Curso>, IEntidadeDeUsuario
     public uint? CargaHoraria { get; set; }
     public DateTime? DataConclusao { get; set; }
 
+    public Curso() { }
+
     public Curso(string nome, uint cargaHoraria, DateTime dataConclusao, string? descricao = null)
     {
         Nome = nome;

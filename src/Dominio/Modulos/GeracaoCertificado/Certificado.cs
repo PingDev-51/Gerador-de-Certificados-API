@@ -20,6 +20,11 @@ public class Certificado : EntidadeBase<Certificado>
 
     public StatusCertificado Status { get; private set; }
 
+    public Certificado()
+    {
+
+    }
+
     public Certificado(
         Guid solicitacaoId,
         string nomeAluno,

@@ -1,0 +1,6 @@
+using GeradorCertificados.Dominio.Modulos.GeracaoCertificado;
+using GeradorCertificados.Infraestrutura.Compartilhado.Orm;
+
+namespace GeradorCertificados.Infraestrutura.Modulos.GeracaoCertificados;
+
+public sealed class RepositorioCertificadoEmOrm(GeradorCertificadosDbContext dbContext) : RepositorioBaseEmOrm<Certificado>(dbContext), IRepositorioCertificados;
