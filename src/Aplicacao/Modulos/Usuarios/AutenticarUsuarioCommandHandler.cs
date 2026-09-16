@@ -1,5 +1,6 @@
 using FluentResults;
 using GeradorCertificados.Aplicacao.Compartilhado;
+using GeradorCertificados.Aplicacao.Modulos.Usuarios.Util;
 using GeradorCertificados.Dominio.Compartilhado.Auth;
 using MediatR;
 
@@ -17,10 +18,10 @@ public sealed class AutenticarUsuarioCommandHandler(IGerenciadorDeIdentidade ger
             request.Senha
         );
 
-        // if (usuario is null)
-        // {
-        //     return Result.Fail(ErrosDeCliente.CredenciaisInvalidas());
-        // }
+        if (usuario is null)
+        {
+            return Result.Fail(ErrosDeUsuario.CredenciaisInvalidas());
+        }
 
         Guid usuarioId = Guid.CreateVersion7();
 
