@@ -40,7 +40,7 @@ public sealed class CertificadoController(IMediator mediator) : ControllerBase
        CancellationToken cancellationToken
    )
     {
-        await mediator.Send(new CadastrarCertificadoCommand(
+        var resultado = await mediator.Send(new CadastrarCertificadoCommand(
         request.Aluno,
         request.NomeCurso,
         request.CargaHoraria,
@@ -51,6 +51,6 @@ public sealed class CertificadoController(IMediator mediator) : ControllerBase
         ), cancellationToken
         );
 
-        return StatusCode(StatusCodes.Status201Created);
+        return StatusCode(201, resultado.Value);
     }
 }

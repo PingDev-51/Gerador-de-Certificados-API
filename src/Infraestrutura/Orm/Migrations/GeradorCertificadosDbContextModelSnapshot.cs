@@ -50,7 +50,7 @@ namespace GeradorCertificados.Infraestrutura.Orm.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<Guid>("SolicitacaoId")
+                    b.Property<Guid?>("SolicitacaoCertificadosId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Status")
@@ -60,7 +60,7 @@ namespace GeradorCertificados.Infraestrutura.Orm.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SolicitacaoId");
+                    b.HasIndex("SolicitacaoCertificadosId");
 
                     b.ToTable("TBCertificados", (string)null);
                 });
@@ -321,9 +321,7 @@ namespace GeradorCertificados.Infraestrutura.Orm.Migrations
                 {
                     b.HasOne("GeradorCertificados.Dominio.Modulos.GeracaoCertificado.SolicitacaoCertificados", null)
                         .WithMany("Certificados")
-                        .HasForeignKey("SolicitacaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SolicitacaoCertificadosId");
                 });
 
             modelBuilder.Entity("GeradorCertificados.Dominio.Modulos.GeracaoCertificado.SolicitacaoCertificados", b =>

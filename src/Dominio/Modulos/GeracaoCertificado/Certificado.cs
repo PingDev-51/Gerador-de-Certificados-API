@@ -4,8 +4,6 @@ namespace GeradorCertificados.Dominio.Modulos.GeracaoCertificado;
 
 public class Certificado : EntidadeBase<Certificado>
 {
-    public Guid SolicitacaoId { get; private set; }
-
     public string NomeAluno { get; private set; } = string.Empty;
 
     public string NomeCurso { get; private set; } = string.Empty;
@@ -32,7 +30,6 @@ public class Certificado : EntidadeBase<Certificado>
         uint cargaHoraria,
         DateTime dataConclusao)
     {
-        SolicitacaoId = solicitacaoId;
         NomeAluno = nomeAluno;
         NomeCurso = nomeCurso;
         CargaHoraria = cargaHoraria;

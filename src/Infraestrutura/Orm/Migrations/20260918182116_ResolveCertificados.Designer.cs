@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GeradorCertificados.Infraestrutura.Orm.Migrations
 {
     [DbContext(typeof(GeradorCertificadosDbContext))]
-    [Migration("20260916202210_Add_TBCertificados")]
-    partial class Add_TBCertificados
+    [Migration("20260918182116_ResolveCertificados")]
+    partial class ResolveCertificados
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,7 +53,7 @@ namespace GeradorCertificados.Infraestrutura.Orm.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<Guid>("SolicitacaoId")
+                    b.Property<Guid?>("SolicitacaoCertificadosId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Status")
@@ -63,7 +63,7 @@ namespace GeradorCertificados.Infraestrutura.Orm.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SolicitacaoId");
+                    b.HasIndex("SolicitacaoCertificadosId");
 
                     b.ToTable("TBCertificados", (string)null);
                 });
@@ -324,9 +324,7 @@ namespace GeradorCertificados.Infraestrutura.Orm.Migrations
                 {
                     b.HasOne("GeradorCertificados.Dominio.Modulos.GeracaoCertificado.SolicitacaoCertificados", null)
                         .WithMany("Certificados")
-                        .HasForeignKey("SolicitacaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SolicitacaoCertificadosId");
                 });
 
             modelBuilder.Entity("GeradorCertificados.Dominio.Modulos.GeracaoCertificado.SolicitacaoCertificados", b =>
