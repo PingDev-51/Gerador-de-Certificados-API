@@ -15,14 +15,11 @@ public sealed record CadastrarCertificadoCommand(
     DateTime DataConclusao,
     string? CaminhoArquivo,
     DateTime? DataGeracao,
-    StatusCertificado Status,
-    string Email,
-    string Senha
+    StatusCertificado Status
 ) : IRequest<Result<Guid>>;
 
 public sealed class CadastrarCertificadoCommandHandler(
-    IRepositorioCertificados repositorioCertificados,
-    IGerenciadorDeIdentidade gerenciadorDeIdentidade
+    IRepositorioCertificados repositorioCertificados
 ) : IRequestHandler<CadastrarCertificadoCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(CadastrarCertificadoCommand command,
@@ -44,15 +41,10 @@ public sealed class CadastrarCertificadoCommandHandler(
 
         try
         {
-            UsuarioDto usuario = await gerenciadorDeIdentidade.CadastrarAsync(
-                certificado.Id,
-                command.Email,
-                command.Senha
-            );
-
             await repositorioCertificados.CadastrarAsync(certificado, cancellationToken);
 
-            return Result.Ok(usuario.Id);
+            return Result.Ok(certificado.Id);
+
         }
         catch (ValidacaoDeIdentidadeException ex)
         {
@@ -64,11 +56,8 @@ public sealed class CadastrarCertificadoCommandHandler(
         }
         catch (ConflitoDePersistenciaException)
         {
-            await gerenciadorDeIdentidade.ExcluirAsync(certificado.Id);
-
             return Result.Fail(ErrosDeUsuario.CadastroDuplicado());
         }
-
     }
 }
 
