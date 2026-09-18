@@ -10,7 +10,7 @@ public sealed record CadastrarCertificadoRequest(
     StatusCertificado Status
 );
 
-public sealed record CadastrarCertificadoResponse(
+public sealed record CertificadoResponse(
     Guid Id,
     string NomeCurso
 );
