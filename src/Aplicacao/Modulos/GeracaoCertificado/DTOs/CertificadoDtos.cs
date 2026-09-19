@@ -10,6 +10,13 @@ public record CertificadoDto(
     StatusCertificado Status
 );
 
+public record StatusCertificadosResponse(
+    Guid SolicitacaoId,
+    StatusGeracaoCertificados Status,
+    DateTime DataSolicitacao,
+    DateTime? DataConclusao,
+    string? CaminhoZip
+);
 
 
 // public Guid SolicitacaoId { get; private set; }
