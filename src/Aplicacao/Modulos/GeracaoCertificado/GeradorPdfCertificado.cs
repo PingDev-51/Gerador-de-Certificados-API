@@ -51,7 +51,7 @@ public sealed class GeradorPdfCertificao
                             .Text("CERTIFICADO")
                             .Bold()
                             .FontSize(32)
-                            .FontColor(Colors.Blue.Darken2);
+                            .FontColor(Colors.Purple.Darken2);
 
                         content.Item()
                             .Text("Certificamos que")
@@ -60,7 +60,8 @@ public sealed class GeradorPdfCertificao
                         content.Item()
                             .Text(nomeAluno)
                             .Bold()
-                            .FontSize(26);
+                            .FontSize(26)
+                            .FontColor(Colors.Purple.Darken2);
 
                         content.Item()
                             .Text(texto =>
@@ -75,8 +76,6 @@ public sealed class GeradorPdfCertificao
                                     .FontSize(18);
                             });
                        
-                          
-
                         content.Item()
                             .PaddingTop(20)
                             .Text(
