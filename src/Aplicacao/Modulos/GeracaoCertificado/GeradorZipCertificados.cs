@@ -1,12 +1,12 @@
 using System.IO.Compression;
 
-namespace GeradorCertificados.Aplicacao.Modulos.GeracaoCertificado;
+namespace GeradorCertificados.Aplicacao.Modulos.GerarCertificadoZip;
 
 public sealed class GeradorDeZipCertificados
 {
     public byte[] Gerar(IEnumerable<string> caminhosArquivos)
     {
-        var stream = new MemoryStream();
+        var stream = new MemoryStream(); // uma parte da memoria que podemos manipular para virar um arquivo
 
         using (var arquivoZip = new ZipArchive(
           stream,

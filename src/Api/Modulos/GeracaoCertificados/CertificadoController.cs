@@ -1,8 +1,5 @@
 using GeradorCertificados.Aplicacao.Modulos.GeracaoCertificado;
-using GeradorCertificados.Aplicacao.Modulos.Usuarios;
-using GeradorCertificados.Dominio.Modulos.GeracaoCertificado;
 using GeradorCertificados.WebApi.Compartilhado.Http;
-using GeradorCertificados.WebApi.Modulos.Usuario;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -93,4 +90,3 @@ public sealed class CertificadoController(IMediator mediator) : ControllerBase
         );
     }
 }
-
