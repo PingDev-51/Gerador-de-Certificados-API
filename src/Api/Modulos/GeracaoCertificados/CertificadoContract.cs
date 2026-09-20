@@ -4,10 +4,7 @@ public sealed record CadastrarCertificadoRequest(
     string Aluno,
     string NomeCurso,
     uint CargaHoraria,
-    DateTime DataConclusao,
-    string? CaminhoArquivo,
-    DateTime? DataGeracao,
-    StatusCertificado Status
+    DateTime DataConclusao
 );
 
 public sealed record CertificadoResponse(
