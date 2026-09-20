@@ -40,7 +40,7 @@ public class Certificado : EntidadeBase<Certificado>
     public void MarcarComoGerado(string caminhoArquivo)
     {
         CaminhoArquivo = caminhoArquivo;
-        DataGeracao = DateTime.Now;
+        DataGeracao = DateTime.UtcNow;
         Status = StatusCertificado.Gerado;
     }
 

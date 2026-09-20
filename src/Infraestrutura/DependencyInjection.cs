@@ -23,7 +23,6 @@ public static class DependencyInjection
         services.AddScoped<IRepositorioCertificados, RepositorioCertificadoEmOrm>();
         services.AddScoped<IRepositorioSolitacaoCertificados, RepositorioSolitacaoCertificadosEmOrm>();
 
-
         services.AddDataProtection();
         services.AddIdentityCore<IdentityUser<Guid>>(options =>
         {

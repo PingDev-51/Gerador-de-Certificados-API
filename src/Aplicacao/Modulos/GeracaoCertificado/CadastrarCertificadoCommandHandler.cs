@@ -12,10 +12,7 @@ public sealed record CadastrarCertificadoCommand(
     string Aluno,
     string NomeCurso,
     uint CargaHoraria,
-    DateTime DataConclusao,
-    string? CaminhoArquivo,
-    DateTime? DataGeracao,
-    StatusCertificado Status
+    DateTime DataConclusao
 ) : IRequest<Result<Guid>>;
 
 public sealed class CadastrarCertificadoCommandHandler(

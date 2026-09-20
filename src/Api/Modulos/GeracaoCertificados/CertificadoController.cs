@@ -44,10 +44,7 @@ public sealed class CertificadoController(IMediator mediator) : ControllerBase
         request.Aluno,
         request.NomeCurso,
         request.CargaHoraria,
-        request.DataConclusao,
-        request.CaminhoArquivo,
-        request.DataGeracao,
-        request.Status
+        request.DataConclusao
         ), cancellationToken
         );
 
@@ -55,12 +52,29 @@ public sealed class CertificadoController(IMediator mediator) : ControllerBase
     }
 
     [Authorize]
+    [HttpPost("{certificadoId:guid}/gerar")]
+    public async Task<IActionResult> Gerar(
+     Guid certificadoId,
+     CancellationToken cancellationToken)
+    {
+        var resultado = await mediator.Send(
+            new GerarCertificadoCommand(certificadoId),
+            cancellationToken
+        );
+
+        if (resultado.IsFailed)
+            return this.ProblemDetails(resultado);
+
+        return Ok();
+    }
+
+    [Authorize]
     [HttpGet("{certificadoId:guid}/download")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Download(
-    Guid certificadoId,
-    CancellationToken cancellationToken)
+       Guid certificadoId,
+       CancellationToken cancellationToken)
     {
         var resultado = await mediator.Send(
             new DownloadCertificadoQuery(certificadoId),

@@ -1,3 +1,4 @@
+using GeradorCertificados.Aplicacao.Modulos.GeracaoCertificado;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,5 +45,7 @@ public static class DependencyInjection
             options.WaitUntilStarted = true;
             options.StartTimeout = TimeSpan.FromSeconds(30);
         });
+
+        services.AddScoped<GeradorPdfCertificao>();
     }
 }
