@@ -18,9 +18,10 @@ public static class DependencyInjection
     )
     {
         services.AddScoped<IGerenciadorDeIdentidade, GerenciadorDeIdentidade>();
-        
+
         //Adicionar a Injeção de dependencia aqui <-----------
         services.AddScoped<IRepositorioCertificados, RepositorioCertificadoEmOrm>();
+        services.AddScoped<IRepositorioSolitacaoCertificados, RepositorioSolitacaoCertificadosEmOrm>();
 
 
         services.AddDataProtection();
