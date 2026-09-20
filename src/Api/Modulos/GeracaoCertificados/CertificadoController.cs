@@ -53,4 +53,30 @@ public sealed class CertificadoController(IMediator mediator) : ControllerBase
 
         return StatusCode(201, resultado.Value);
     }
+
+    [Authorize]
+    [HttpGet("{certificadoId:guid}/download")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Download(
+    Guid certificadoId,
+    CancellationToken cancellationToken)
+    {
+        var resultado = await mediator.Send(
+            new DownloadCertificadoQuery(certificadoId),
+            cancellationToken
+        );
+
+        if (resultado.IsFailed)
+            return this.ProblemDetails(resultado);
+
+        var arquivo = resultado.Value;
+
+        return File(
+            arquivo.Conteudo,
+            "application/pdf",
+            arquivo.NomeArquivo
+        );
+    }
 }
+

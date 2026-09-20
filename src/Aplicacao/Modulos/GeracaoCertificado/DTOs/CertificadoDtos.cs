@@ -18,6 +18,11 @@ public record StatusCertificadosResponse(
     string? CaminhoZip
 );
 
+public record ArquivoResponse(
+    byte[] Conteudo,
+    string NomeArquivo
+);
+
 
 // public Guid SolicitacaoId { get; private set; }
 
