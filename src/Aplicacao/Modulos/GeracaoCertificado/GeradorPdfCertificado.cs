@@ -84,6 +84,7 @@ public sealed class GeradorPdfCertificao
                             .FontSize(14);
                     });
 
+
                 pagina.Footer()
                     .AlignCenter()
                     .Text("Certificado de conclusão de curso");
