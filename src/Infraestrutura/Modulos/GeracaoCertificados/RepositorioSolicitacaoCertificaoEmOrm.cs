@@ -10,9 +10,21 @@ public sealed class RepositorioSolitacaoCertificadosEmOrm(
 ) : RepositorioBaseEmOrm<SolicitacaoCertificados>(dbContext),
     IRepositorioSolitacaoCertificados
 {
+    public new async Task<SolicitacaoCertificados?> SelecionarPorIdAsync(
+        Guid idSelecionado,
+        CancellationToken cancellationToken = default)
+    {
+        return await dbContext.Set<SolicitacaoCertificados>()
+            .Include(x => x.Certificados)
+            .FirstOrDefaultAsync(
+                x => x.Id == idSelecionado,
+                cancellationToken
+            );
+    }
+
     public async Task<SolicitacaoCertificados?> BuscarPorCursoIdAsync(
-        Guid cursoId,
-        CancellationToken cancellationToken)
+    Guid cursoId,
+    CancellationToken cancellationToken)
     {
         return await dbContext.Set<SolicitacaoCertificados>()
             .Where(x => x.CursoId == cursoId)
