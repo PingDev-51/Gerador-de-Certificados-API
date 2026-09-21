@@ -7,6 +7,10 @@ public sealed record CadastrarCertificadoRequest(
     DateTime DataConclusao
 );
 
+public sealed record SolicitarCertificadosRequest(
+    List<string> NomesAlunos
+);
+
 public sealed record CertificadoResponse(
     Guid Id,
     string NomeCurso

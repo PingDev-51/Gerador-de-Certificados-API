@@ -12,7 +12,7 @@ public sealed class GerarCertificadosConsumer(
 ) : IConsumer<GerarCertificadosMessage>
 {
     public async Task Consume(
-        ConsumeContext<GerarCertificadosMessage> context)
+    ConsumeContext<GerarCertificadosMessage> context)
     {
         var mensagem = context.Message;
 
@@ -33,6 +33,12 @@ public sealed class GerarCertificadosConsumer(
 
         solicitacao.IniciarGeracao();
 
+        await repositorioSolicitacoes.EditarAsync(
+            solicitacao.Id,
+            solicitacao,
+            context.CancellationToken
+        );
+
         foreach (var certificado in solicitacao.Certificados)
         {
             var resultado = await mediator.Send(
@@ -42,6 +48,14 @@ public sealed class GerarCertificadosConsumer(
 
             if (resultado.IsFailed)
             {
+                solicitacao.MarcarComoFalha();
+
+                await repositorioSolicitacoes.EditarAsync(
+                    solicitacao.Id,
+                    solicitacao,
+                    context.CancellationToken
+                );
+
                 logger.LogInformation(
                     "Falha ao gerar o certificado {CertificadoId} da solicitação {SolicitacaoId}.",
                     certificado.Id,
@@ -59,6 +73,14 @@ public sealed class GerarCertificadosConsumer(
 
         if (resultadoZip.IsFailed)
         {
+            solicitacao.MarcarComoFalha();
+
+            await repositorioSolicitacoes.EditarAsync(
+                solicitacao.Id,
+                solicitacao,
+                context.CancellationToken
+            );
+
             logger.LogInformation(
                 "Falha ao gerar o ZIP da solicitação {SolicitacaoId}.",
                 solicitacao.Id
