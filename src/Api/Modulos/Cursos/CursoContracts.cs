@@ -9,7 +9,7 @@ public sealed record CadastrarCursoRequest(
     DateTime DataConclusao
 );
 
-public sealed record CadastrarCursoResponse(
-    Guid Id
-);
+// public sealed record CadastrarCursoResponse(
+//     Guid Id
+// );
 
