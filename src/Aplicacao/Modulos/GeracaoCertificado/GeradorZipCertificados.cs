@@ -27,7 +27,6 @@ public sealed class GeradorDeZipCertificados
 
             }
         }
-
         return stream.ToArray();
     }
 }

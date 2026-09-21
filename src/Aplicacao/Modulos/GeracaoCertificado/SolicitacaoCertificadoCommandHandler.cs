@@ -12,7 +12,8 @@ public sealed record SolicitarCertificadosCommand(
 ) : IRequest<Result<Guid>>;
 
 public sealed class SolicitarCertificadosCommandHandler(
-    IRepositorioSolitacaoCertificados repositorio,
+    IRepositorioCurso repositorioCurso,
+    IRepositorioSolitacaoCertificados repositorioSolicitacoes,
     IPublishEndpoint publishEndpoint
 ) : IRequestHandler<SolicitarCertificadosCommand, Result<Guid>>
 {
@@ -20,12 +21,25 @@ public sealed class SolicitarCertificadosCommandHandler(
         SolicitarCertificadosCommand command,
         CancellationToken cancellationToken)
     {
-        var solicitacao = new SolicitacaoCertificados(
+        var curso = await repositorioCurso.SelecionarPorIdAsync(
             command.CursoId,
+            cancellationToken
+        );
+
+        if (curso is null)
+            return Result.Fail("Curso não encontrado.");
+
+        if (command.NomesAlunos.Count == 0)
+            return Result.Fail(
+                "A lista de alunos deve possuir pelo menos um aluno."
+            );
+
+        var solicitacao = new SolicitacaoCertificados(
+            curso.Id,
             command.NomesAlunos
         );
 
-        await repositorio.CadastrarAsync(
+        await repositorioSolicitacoes.CadastrarAsync(
             solicitacao,
             cancellationToken
         );
