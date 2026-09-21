@@ -1,4 +1,4 @@
-namespace GeradorCertificados.Aplicacao.DTOs;
+namespace GeradorCertificados.Aplicacao.Modulos.Cursos.DTOs;
 
 public sealed record CursoDto(
     Guid Id,
