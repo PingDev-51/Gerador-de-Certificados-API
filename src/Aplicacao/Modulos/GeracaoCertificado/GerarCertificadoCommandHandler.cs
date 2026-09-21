@@ -41,7 +41,7 @@ public sealed class GerarCertificadoCommandHandler(
 
             Directory.CreateDirectory(pasta);
 
-            var nomeArquivo = $"{certificado.Id}.pdf";
+            var nomeArquivo = $"{certificado.NomeAluno}.pdf";
 
             var caminhoArquivo = Path.Combine(
                 pasta,
@@ -66,7 +66,6 @@ public sealed class GerarCertificadoCommandHandler(
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"ERRO AO GERAR PDF: {ex}");
 
             certificado.MarcarComoFalha();
 
@@ -76,7 +75,7 @@ public sealed class GerarCertificadoCommandHandler(
                 cancellationToken
             );
 
-            return Result.Fail("Não foi possível gerar o certificado.");
+            return Result.Fail($"Não foi possível gerar o certificado: {ex.Message}");
         }
     }
 }
