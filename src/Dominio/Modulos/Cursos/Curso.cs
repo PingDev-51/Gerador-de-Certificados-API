@@ -1,11 +1,11 @@
 using GeradorCertificados.Dominio.Compartilhado;
 using GeradorCertificados.Dominio.Compartilhado.Auth;
 
-namespace GeradorCertificados.Dominio.Modulos.ModuloCurso;
+namespace GeradorCertificados.Dominio.Modulos.Cursos;
 
 public class Curso : EntidadeBase<Curso>, IEntidadeDeUsuario
 {
-    public Guid UsuarioId { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    public Guid UsuarioId { get; set; }
 
     public string Nome { get; set; } = string.Empty;
     public string? Descricao { get; set; }
@@ -32,30 +32,26 @@ public class Curso : EntidadeBase<Curso>, IEntidadeDeUsuario
     {
         List<ErroValidacao> erros = [];
 
-
         if (Nome == null)
-            erros.Add(new(nameof(Nome), "O Camnpo Nome deve ser preenchido"));
+            erros.Add(new(nameof(Nome), "O campo Nome deve ser preenchido"));
 
         if (Nome?.Length < 2)
-            erros.Add(new(nameof(Nome), "O campo Nome deve conter mais de 2 caracteres"));
+            erros.Add(new(nameof(Nome), "O campo Nome deve conter pelo menos 2 caracteres"));
 
         if (Nome?.Length > 200)
-            erros.Add(new(nameof(Nome), "O campo Nome deve conter menos de 200 caracteres"));
-
-        if (Descricao == null)
-            erros.Add(new(nameof(Descricao), "O Camnpo descrição deve ser preenchido"));
+            erros.Add(new(nameof(Nome), "O campo Nome deve conter no máximo 200 caracteres"));
 
         if (Descricao?.Length < 2)
-            erros.Add(new(nameof(Descricao), "O campo descrição deve conter mais de 2 caracteres"));
+            erros.Add(new(nameof(Descricao), "O campo descrição deve conter pelo menos 2 caracteres"));
 
         if (Descricao?.Length > 500)
-            erros.Add(new(nameof(Descricao), "O campo descrição deve conter menos de 500 caracteres"));
+            erros.Add(new(nameof(Descricao), "O campo descrição deve conter no máximo 500 caracteres"));
 
         if (CargaHoraria == null)
-            erros.Add(new(nameof(CargaHoraria), "O campo Carga horaria deve ser preenchido"));
+            erros.Add(new(nameof(CargaHoraria), "O campo Carga horária deve ser preenchido"));
 
         if (DataConclusao == null)
-            erros.Add(new(nameof(DataConclusao), "O Campo Data de conclusão deve ser preenchido"));
+            erros.Add(new(nameof(DataConclusao), "O campo Data de conclusão deve ser preenchido"));
 
         return erros;
     }
