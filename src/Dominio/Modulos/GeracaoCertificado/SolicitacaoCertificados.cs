@@ -18,15 +18,18 @@ public class SolicitacaoCertificados : EntidadeBase<SolicitacaoCertificados>
 
     public SolicitacaoCertificados()
     {
-        
+
     }
 
     public SolicitacaoCertificados(
-        Guid cursoId,
-        List<string> nomesAlunos)
+     Guid cursoId,
+     string nomeCurso,
+     uint cargaHoraria,
+     DateTime dataConclusao,
+     List<string> nomesAlunos)
     {
         CursoId = cursoId;
-        DataSolicitacao = DateTime.Now;
+        DataSolicitacao = DateTime.UtcNow;
         Status = StatusGeracaoCertificados.Pendente;
 
         foreach (var nomeAluno in nomesAlunos)
@@ -35,9 +38,11 @@ public class SolicitacaoCertificados : EntidadeBase<SolicitacaoCertificados>
                 new Certificado(
                     Id,
                     nomeAluno,
-                    string.Empty,
-                    0,
-                    DateTime.MinValue));
+                    nomeCurso,
+                    cargaHoraria,
+                    dataConclusao
+                )
+            );
         }
     }
 

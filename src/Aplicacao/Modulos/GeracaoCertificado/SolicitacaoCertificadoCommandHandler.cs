@@ -34,10 +34,28 @@ public sealed class SolicitarCertificadosCommandHandler(
                 "A lista de alunos deve possuir pelo menos um aluno."
             );
 
+        var solicitacaoExistente =
+            await repositorioSolicitacoes.BuscarPorCursoIdAsync(
+                command.CursoId,
+                cancellationToken
+            );
+
+        if (solicitacaoExistente is not null &&
+            solicitacaoExistente.EstaProcessando())
+        {
+            return Result.Fail(
+                "Já existe uma solicitação de certificados em processamento para este curso."
+            );
+        }
+
         var solicitacao = new SolicitacaoCertificados(
-            curso.Id,
-            command.NomesAlunos
-        );
+             curso.Id,
+             curso.Nome,
+             curso.CargaHoraria!.Value,
+             curso.DataConclusao!.Value,
+             command.NomesAlunos
+         );
+
 
         await repositorioSolicitacoes.CadastrarAsync(
             solicitacao,
