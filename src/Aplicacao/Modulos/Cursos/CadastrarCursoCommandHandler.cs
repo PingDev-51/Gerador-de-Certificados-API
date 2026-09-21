@@ -10,3 +10,16 @@ public sealed record CadastrarCursoCommand(
     uint CargaHoraria,
     DateTime DataConclusao
 ) : IRequest<Result<Guid>>;
+
+public sealed class CadastrarCursoCommandHandler(
+    IRepositorioCurso repositorioCurso
+) : IRequestHandler<CadastrarCursoCommand, Result<Guid>>
+{
+    public async Task<Result<Guid>> Handle(
+        CadastrarCursoCommand command,
+        CancellationToken cancellationToken = default
+    )
+    {
+        // ...
+    }
+}
