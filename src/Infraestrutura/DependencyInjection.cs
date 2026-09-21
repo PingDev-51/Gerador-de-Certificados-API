@@ -22,7 +22,7 @@ public static class DependencyInjection
         //Adicionar a Injeção de dependencia aqui <-----------
         services.AddScoped<IRepositorioCertificados, RepositorioCertificadoEmOrm>();
         services.AddScoped<IRepositorioSolitacaoCertificados, RepositorioSolitacaoCertificadosEmOrm>();
-        services.AddScoped<IRepositorioCurso, RepositorioCursoEmOrm>();
+        // services.AddScoped<IRepositorioCurso, RepositorioCursoEmOrm>();
 
         services.AddDataProtection();
         services.AddIdentityCore<IdentityUser<Guid>>(options =>
