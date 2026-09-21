@@ -1,6 +1,4 @@
 using FluentResults;
-using GeradorCertificados.Dominio.Modulos.GeracaoCertificado;
-using MassTransit.DependencyInjection;
 using MediatR;
 
 public sealed record ConsultarStatusCertificadoQuery(

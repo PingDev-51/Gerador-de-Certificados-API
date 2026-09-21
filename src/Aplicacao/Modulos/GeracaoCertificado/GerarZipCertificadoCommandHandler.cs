@@ -34,6 +34,12 @@ public sealed class GerarZipCertificadosCommandHandler(
 
         solicitacao.IniciarGeracaoZip();
 
+        await repositorioSolicitacoes.EditarAsync(
+           solicitacao.Id,
+           solicitacao,
+           cancellationToken
+       );
+
         var zip = geradorZip.Gerar(caminhos);
 
         var pasta = Path.Combine(

@@ -36,4 +36,22 @@ public sealed class CertificadoController(
             solicitacaoId = resultado.Value
         });
     }
+
+
+    [HttpGet("~/cursos/{cursoId:guid}/status")]
+    [ProducesResponseType<StatusCertificadosResponse>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> ConsultarStatus(
+        Guid cursoId,
+        CancellationToken cancellationToken)
+    {
+        var resultado = await mediator.Send(
+            new ConsultarStatusCertificadoQuery(cursoId),
+            cancellationToken
+        );
+
+        if (resultado.IsFailed)
+            return this.ProblemDetails(resultado);
+
+        return Ok(resultado.Value);
+    }
 }
