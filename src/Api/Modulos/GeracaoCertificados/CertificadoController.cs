@@ -71,4 +71,25 @@ public sealed class CertificadoController(
 
         return Ok(resultado.Value);
     }
+
+    [HttpGet("download")]
+    [Produces("application/zip")]
+    public async Task<IActionResult> Download(
+        Guid cursoId,
+        CancellationToken cancellationToken)
+    {
+        var resultado = await mediator.Send(
+            new DownloadZipCertificadosQuery(cursoId),
+            cancellationToken
+        );
+
+        if (resultado.IsFailed)
+            return this.ProblemDetails(resultado);
+
+        return File(
+            resultado.Value.Conteudo,
+            "application/zip",
+            resultado.Value.NomeArquivo
+        );
+    }
 }
