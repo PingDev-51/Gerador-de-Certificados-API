@@ -54,4 +54,21 @@ public sealed class CertificadoController(
 
         return Ok(resultado.Value);
     }
+
+    [HttpGet]
+    [ProducesResponseType<List<CertificadoDto>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> Listar(
+    Guid cursoId,
+    CancellationToken cancellationToken)
+    {
+        var resultado = await mediator.Send(
+            new ObterCertificadoQuery(cursoId),
+            cancellationToken
+        );
+
+        if (resultado.IsFailed)
+            return this.ProblemDetails(resultado);
+
+        return Ok(resultado.Value);
+    }
 }

@@ -13,8 +13,12 @@ public sealed class CertificadoConfiguration
         builder.ToTable("TBCertificados");
 
         builder.HasKey(c => c.Id);
+
         builder.Property(c => c.Id)
             .ValueGeneratedNever();
+
+        builder.Property(c => c.SolicitacaoId)
+            .IsRequired();
 
         builder.Property(c => c.NomeAluno)
             .HasMaxLength(200)
@@ -39,6 +43,11 @@ public sealed class CertificadoConfiguration
             .HasConversion<string>()
             .HasMaxLength(30)
             .IsRequired();
+
+        builder.HasOne<SolicitacaoCertificados>()
+            .WithMany(s => s.Certificados)
+            .HasForeignKey(c => c.SolicitacaoId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
 
@@ -50,6 +59,7 @@ public sealed class SolicitacaoCertificadosConfiguration
         builder.ToTable("TBSolicitacoesCertificados");
 
         builder.HasKey(s => s.Id);
+
         builder.Property(s => s.Id)
             .ValueGeneratedNever();
 
@@ -79,7 +89,5 @@ public sealed class SolicitacaoCertificadosConfiguration
             .WithMany()
             .HasForeignKey(s => s.CursoId)
             .OnDelete(DeleteBehavior.Restrict);
-
     }
 }
-
