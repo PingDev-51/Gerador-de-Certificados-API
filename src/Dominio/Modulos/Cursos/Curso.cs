@@ -41,17 +41,11 @@ public class Curso : EntidadeBase<Curso>, IEntidadeDeUsuario
         if (Nome?.Length > 200)
             erros.Add(new(nameof(Nome), "O campo Nome deve conter no máximo 200 caracteres"));
 
-        if (Descricao?.Length < 2)
-            erros.Add(new(nameof(Descricao), "O campo descrição deve conter pelo menos 2 caracteres"));
-
         if (Descricao?.Length > 500)
             erros.Add(new(nameof(Descricao), "O campo descrição deve conter no máximo 500 caracteres"));
 
-        if (CargaHoraria == null)
+        if (CargaHoraria is null or 0)
             erros.Add(new(nameof(CargaHoraria), "O campo Carga horária deve ser preenchido"));
-
-        if (DataConclusao == null)
-            erros.Add(new(nameof(DataConclusao), "O campo Data de conclusão deve ser preenchido"));
 
         return erros;
     }

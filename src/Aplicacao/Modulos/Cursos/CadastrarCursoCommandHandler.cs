@@ -1,5 +1,5 @@
-using System;
 using FluentResults;
+using GeradorCertificados.Aplicacao.Modulos.Cursos.Util;
 using GeradorCertificados.Dominio.Modulos.Cursos;
 using MediatR;
 
@@ -32,7 +32,7 @@ public sealed class CadastrarCursoCommandHandler(
 
         if (erros.Count > 0)
         {
-            // tratar erros
+            return Result.Fail(ErrosDeCurso.Validacao(erros));
         }
 
         await repositorioCurso.CadastrarAsync(
