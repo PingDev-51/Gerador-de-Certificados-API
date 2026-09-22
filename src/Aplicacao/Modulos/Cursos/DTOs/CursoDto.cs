@@ -4,6 +4,6 @@ public sealed record CursoDto(
     Guid Id,
     string Nome,
     string? Descricao,
-    uint CargaHoraria,
-    DateTime DataConclusao
+    uint? CargaHoraria,
+    DateTime? DataConclusao
 );

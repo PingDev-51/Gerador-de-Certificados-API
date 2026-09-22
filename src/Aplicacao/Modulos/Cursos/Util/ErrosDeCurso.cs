@@ -1,15 +1,18 @@
 using System;
 using GeradorCertificados.Dominio.Compartilhado;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using FluentResults;
 
 namespace GeradorCertificados.Aplicacao.Modulos.Cursos.Util;
 
-public class ErroDeCurso
+public static class ErrosDeCurso
 {
     public static Error Validacao(IReadOnlyList<ErroValidacao> erros)
     {
-        return new Error("O curso possui erros de validação.")
-            .WithMetadata("erros", erros);
+        return new Error("O curso possui erros de validação.").WithMetadata("erros", erros);
     }
 
+    public static Error NaoEncontrado(Guid cursoId)
+    {
+        return new Error($"O curso '{cursoId}' não foi encontrado.");
+    }
 }
