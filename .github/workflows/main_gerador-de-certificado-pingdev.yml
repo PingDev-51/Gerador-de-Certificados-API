@@ -35,6 +35,37 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
+  migrate:
+    runs-on: windows-latest
+    needs: build
+    permissions:
+      contents: read #This is required for actions/checkout
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.x"
+
+      - name: Restore dependencies
+        run: dotnet restore src/Api/GeradorCertificados.WebApi.csproj
+
+      - name: Install Entity Framework CLI
+        run: dotnet tool install --global dotnet-ef
+
+      - name: Apply ORM migrations to AzureSQL
+        env:
+          SQLSERVER_CONNECTIONSTRING: ${{ secrets.SQLSERVER_CONNECTIONSTRING }}
+          Infra__NewRelic__LicenseKey: ${{ secrets.NEWRELIC_LICENSE_KEY }}
+        run: |
+          dotnet ef database update `
+            --project src/Infraestrutura/GeradorCertificados.Infraestrutura.csproj `
+            --startup-project src/Api/GeradorCertificados.WebApi.csproj `
+            --configuration Release `
+            --connection "$env:SQLSERVER_CONNECTIONSTRING "
+
   deploy:
     runs-on: windows-latest
     needs: build
@@ -54,6 +85,20 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5B8520ED716645E284B1A373E29C8BB3 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9E2C9A34EBBE428387A9D7F619959351 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_992415D0E8A74275B6779F04B1BC63CC }}
+
+      - name: Configure Azure Web App settings
+        shell: pwsh
+        run: |
+          az webapp config appsettings set `
+            --resource-group "ControleDeBarPingDev" `
+            --name "PingDevBar" `
+            --settings `
+              "ConnectionStrings__SqlServer=${{ secrets.SQLSERVER_CONNECTIONSTRING}}" `
+              "ConnectionStrings__RabbitMq=${{ secrets.RABBITMQ_CONNECTIONSTRING}}" `
+              "Jwt_SigningKey=${{ secrets.JWT_SIGNING_KEY }}" `
+              "Infra__NewRelic__LicenseKey=${{ secrets.NEWRELIC_LICENSE_KEY }}" `
+              "LuckyPenny_LicenseKey=${{ secrets.LUCKYPENNY_LICENSE_KEY }}
+        
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
