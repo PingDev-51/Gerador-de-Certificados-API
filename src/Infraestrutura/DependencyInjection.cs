@@ -1,5 +1,4 @@
 using GeradorCertificados.Dominio.Compartilhado.Auth;
-using GeradorCertificados.Dominio.Modulos.Cursos;
 using GeradorCertificados.Infraestrutura.Compartilhado.Auth;
 using GeradorCertificados.Infraestrutura.Compartilhado.Orm;
 using GeradorCertificados.Infraestrutura.Modulos.Cursos;
@@ -8,6 +7,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
 
 namespace GeradorCertificados.Infraestrutura;
 
@@ -20,11 +21,8 @@ public static class DependencyInjection
     {
         services.AddScoped<IGerenciadorDeIdentidade, GerenciadorDeIdentidade>();
         services.AddScoped<IRepositorioCurso, RepositorioCursoEmOrm>();
-
-        //Adicionar a Injeção de dependencia aqui <-----------
         services.AddScoped<IRepositorioCertificados, RepositorioCertificadoEmOrm>();
         services.AddScoped<IRepositorioSolitacaoCertificados, RepositorioSolitacaoCertificadosEmOrm>();
-        // services.AddScoped<IRepositorioCurso, RepositorioCursoEmOrm>();
 
         services.AddDataProtection();
 
@@ -46,26 +44,38 @@ public static class DependencyInjection
 
         services.AddDbContext<GeradorCertificadosDbContext>(options =>
         {
-            if (configuration["Infra:DatabaseProvider"] == "InMemory")
-            {
-                options.UseInMemoryDatabase("GeradorCertificados");
-            }
-            else
-            {
-                string? connectionString = configuration.GetConnectionString("PostgresEF");
+            var connection = configuration.GetConnectionString("SqlServer");
 
-                if (string.IsNullOrWhiteSpace(connectionString))
-                {
-                    throw new InvalidOperationException(
-                        $"A connection string \"PostgresEF\" não foi encontrada."
-                    );
-                }
-
-                options.UseNpgsql(connectionString, opt =>
-                {
-                    opt.EnableRetryOnFailure(3);
-                });
-            }
+            if (string.IsNullOrWhiteSpace(connection))
+                throw new InvalidOperationException("Connection string \"SqlServer\" não configura.");
+                
+            options.UseSqlServer(connection);
         });
+
+        //Uso de Postgres
+
+        // services.AddDbContext<GeradorCertificadosDbContext>(options =>
+        // {
+        //     if (configuration["Infra:DatabaseProvider"] == "InMemory")
+        //     {
+        //         options.UseInMemoryDatabase("GeradorCertificados");
+        //     }
+        //     else
+        //     {
+        //         string? connectionString = configuration.GetConnectionString("PostgresEF");
+
+        //         if (string.IsNullOrWhiteSpace(connectionString))
+        //         {
+        //             throw new InvalidOperationException(
+        //                 $"A connection string \"PostgresEF\" não foi encontrada."
+        //             );
+        //         }
+
+        //         options.UseNpgsql(connectionString, opt =>
+        //         {
+        //             opt.EnableRetryOnFailure(3);
+        //         });
+        //     }
+        // });
     }
 }
