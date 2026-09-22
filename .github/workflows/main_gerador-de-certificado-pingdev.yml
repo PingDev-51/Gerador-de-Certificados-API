@@ -94,7 +94,7 @@ jobs:
         run: |
          az webapp config appsettings set `
           --resource-group "GeradorDeCertificados" `
-          --name "gerador-de-certificados-pingdev" `
+          --name "gerador-de-certificado-pingdev" `
           --settings `
           "ConnectionStrings__SqlServer=${{ secrets.SQLSERVER_CONNECTIONSTRING }}" `
           "ConnectionStrings__RabbitMq=${{ secrets.RABBITMQ_CONNECTIONSTRING }}" `
