@@ -39,15 +39,11 @@ public class GerarZipCertificadosCommandHandlerTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(solicitacao);
 
-        var gerador = new Mock<GeradorDeZipCertificados>();
-
-        gerador
-            .Setup(x => x.Gerar(It.IsAny<IEnumerable<string>>()))
-            .Returns([1, 2, 3]);
+        var gerador = new GeradorDeZipCertificados();
 
         var handler = new GerarZipCertificadosCommandHandler(
             repositorio.Object,
-            gerador.Object
+            gerador
         );
 
         var resultado = await handler.Handle(

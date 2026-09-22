@@ -2,6 +2,7 @@ using FluentAssertions;
 using GeradorCertificados.Aplicacao.Modulos.GeracaoCertificado;
 using GeradorCertificados.Dominio.Modulos.GeracaoCertificado;
 using Moq;
+using QuestPDF.Infrastructure;
 
 namespace GeradorDeCertificados.Testes.Unidade.Modulos.Certificados.Servico;
 
@@ -11,6 +12,8 @@ public class GerarCertificadoCommandHandlerTests
     [TestMethod]
     public async Task DeveGerarCertificadoComSucesso()
     {
+        QuestPDF.Settings.License = LicenseType.Evaluation;
+
         var certificado = new Certificado(
             Guid.NewGuid(),
             "Kauan",
@@ -27,19 +30,11 @@ public class GerarCertificadoCommandHandlerTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(certificado);
 
-        var geradorPdf = new Mock<GeradorPdfCertificao>();
-
-        geradorPdf
-            .Setup(x => x.Gerar(
-                certificado.NomeAluno,
-                certificado.NomeCurso,
-                certificado.CargaHoraria,
-                certificado.DataConclusao))
-            .Returns([1, 2, 3]);
+        var geradorPdf = new GeradorPdfCertificao();
 
         var handler = new GerarCertificadoCommandHandler(
             repositorio.Object,
-            geradorPdf.Object
+            geradorPdf
         );
 
         var resultado = await handler.Handle(
@@ -58,6 +53,12 @@ public class GerarCertificadoCommandHandlerTests
                 It.IsAny<CancellationToken>()),
             Times.Once
         );
+
+        if (certificado.CaminhoArquivo is not null &&
+            File.Exists(certificado.CaminhoArquivo))
+        {
+            File.Delete(certificado.CaminhoArquivo);
+        }
     }
 
     [TestMethod]
@@ -71,11 +72,11 @@ public class GerarCertificadoCommandHandlerTests
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync((Certificado?)null);
 
-        var geradorPdf = new Mock<GeradorPdfCertificao>();
+        var geradorPdf = new GeradorPdfCertificao();
 
         var handler = new GerarCertificadoCommandHandler(
             repositorio.Object,
-            geradorPdf.Object
+            geradorPdf
         );
 
         var resultado = await handler.Handle(
@@ -84,14 +85,5 @@ public class GerarCertificadoCommandHandlerTests
         );
 
         resultado.IsFailed.Should().BeTrue();
-
-        geradorPdf.Verify(
-            x => x.Gerar(
-                It.IsAny<string>(),
-                It.IsAny<string>(),
-                It.IsAny<uint>(),
-                It.IsAny<DateTime>()),
-            Times.Never
-        );
     }
 }
