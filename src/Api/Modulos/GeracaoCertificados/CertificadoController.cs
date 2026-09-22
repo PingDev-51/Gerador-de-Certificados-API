@@ -62,7 +62,7 @@ public sealed class CertificadoController(
     CancellationToken cancellationToken)
     {
         var resultado = await mediator.Send(
-            new ObterCertificadoQuery(cursoId),
+            new ListarCertificadosQuery(cursoId),
             cancellationToken
         );
 

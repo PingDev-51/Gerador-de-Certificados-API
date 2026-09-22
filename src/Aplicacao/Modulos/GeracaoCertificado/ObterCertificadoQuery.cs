@@ -5,36 +5,36 @@ using MediatR;
 
 namespace GeradorCertificados.Aplicacao.Modulos.GeracaoCertificado;
 
-public sealed record ObterCertificadoQuery(
-    Guid CertificadoId
-) : IRequest<Result<CertificadoDto>>;
+public sealed record ListarCertificadosQuery(
+    Guid CursoId
+) : IRequest<Result<List<CertificadoDto>>>;
 
-public sealed class ObterCertificadoPorIdQueryHandler(
+public sealed class ListarCertificadosQueryHandler(
     IRepositorioCertificados repositorioCertificados
-) : IRequestHandler<ObterCertificadoQuery, Result<CertificadoDto>>
+) : IRequestHandler<ListarCertificadosQuery, Result<List<CertificadoDto>>>
 {
-    public async Task<Result<CertificadoDto>> Handle(
-        ObterCertificadoQuery query,
-        CancellationToken cancellationToken = default
-    )
+    public async Task<Result<List<CertificadoDto>>> Handle(
+        ListarCertificadosQuery query,
+        CancellationToken cancellationToken = default)
     {
-        Certificado? certificado = await repositorioCertificados.SelecionarPorIdAsync(
-         query.CertificadoId,
-         cancellationToken
-        );
+        var certificados = await repositorioCertificados
+            .SelecionarPorCursoIdAsync(
+                query.CursoId,
+                cancellationToken
+            );
 
-        if(certificado is null)
-            return Result.Fail(ErrosDeCertificado.NaoEncontrado(query.CertificadoId));
+        var certificadosDto = certificados
+            .Select(certificado => new CertificadoDto(
+                certificado.NomeAluno,
+                certificado.NomeCurso,
+                certificado.CargaHoraria,
+                certificado.DataConclusao,
+                certificado.CaminhoArquivo,
+                certificado.DataGeracao,
+                certificado.Status
+            ))
+            .ToList();
 
-
-        return Result.Ok(new CertificadoDto(
-            certificado.NomeAluno,
-            certificado.NomeCurso,
-            certificado.CargaHoraria,
-            certificado.DataConclusao,
-            certificado.CaminhoArquivo,
-            certificado.DataGeracao,
-            certificado.Status
-        ));
+        return Result.Ok(certificadosDto);
     }
 }

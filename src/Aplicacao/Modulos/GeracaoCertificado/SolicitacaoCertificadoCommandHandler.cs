@@ -1,4 +1,5 @@
 using FluentResults;
+using GeradorCertificados.Aplicacao.Compartilhado;
 using GeradorCertificados.Aplicacao.Modulos.GeracaoCertificado.Mensageria;
 using GeradorCertificados.Dominio.Modulos.GeracaoCertificado;
 using MassTransit;
@@ -27,11 +28,19 @@ public sealed class SolicitarCertificadosCommandHandler(
         );
 
         if (curso is null)
-            return Result.Fail("Curso não encontrado.");
+            return Result.Fail(
+                TipoErro.NaoEncontrado.ObterMetadados(
+                    "",
+                    "Curso não encontrado."
+                )
+            );
 
         if (command.NomesAlunos.Count == 0)
             return Result.Fail(
-                "A lista de alunos deve possuir pelo menos um aluno."
+                TipoErro.Validacao.ObterMetadados(
+                    nameof(command.NomesAlunos),
+                    "A lista de alunos deve possuir pelo menos um aluno."
+                )
             );
 
         var solicitacaoExistente =
@@ -40,13 +49,13 @@ public sealed class SolicitarCertificadosCommandHandler(
                 cancellationToken
             );
 
-        if (solicitacaoExistente is not null &&
-            solicitacaoExistente.EstaProcessando())
-        {
+        if (solicitacaoExistente is not null && solicitacaoExistente.EstaProcessando())
             return Result.Fail(
-                "Já existe uma solicitação de certificados em processamento para este curso."
+                TipoErro.Conflito.ObterMetadados(
+                    "",
+                    "Já existe uma solicitação de certificados em processamento para este curso."
+                )
             );
-        }
 
         var solicitacao = new SolicitacaoCertificados(
              curso.Id,
