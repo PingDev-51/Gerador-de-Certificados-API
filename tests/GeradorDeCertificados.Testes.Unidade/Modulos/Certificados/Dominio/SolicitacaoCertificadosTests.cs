@@ -2,7 +2,7 @@
 
 using GeradorCertificados.Dominio.Modulos.GeracaoCertificado;
 
-namespace GeradorDeCertificados.Testes.Unidade.Modulos.Certificados;
+namespace GeradorDeCertificados.Testes.Unidade.Modulos.Certificados.Dominio;
 
 [TestClass]
 public class SolicitacaoCertificadosTests
