@@ -19,4 +19,9 @@
   <ItemGroup>
     <ProjectReference Include="../Dominio/GeradorCertificados.Dominio.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Compartilhado\Orm\Config\" />
+    <Folder Include="Modulos\" />
+    <Folder Include="Modulos\Cursos\" />
+  </ItemGroup>
 </Project>

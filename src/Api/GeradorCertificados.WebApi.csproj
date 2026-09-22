@@ -23,4 +23,8 @@
     <ProjectReference Include="../Aplicacao/GeradorCertificados.Aplicacao.csproj" />
     <ProjectReference Include="../Infraestrutura/GeradorCertificados.Infraestrutura.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modulos\" />
+    <Folder Include="Modulos\ModuloCurso\" />
+  </ItemGroup>
 </Project>
