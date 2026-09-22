@@ -17,14 +17,21 @@ QuestPDF.Settings.License = LicenseType.Evaluation;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configuração de opções de serviços
+var jwtSigningKey = builder.Configuration["Jwt_SigningKey"];
+
 builder.Services
     .AddOptions<JwtOptions>()
     .BindConfiguration(JwtOptions.SectionName)
+    .Configure(options =>
+    {
+        if (!string.IsNullOrWhiteSpace(jwtSigningKey))
+            options.Key = jwtSigningKey;
+    })
     .Validate(o => !string.IsNullOrWhiteSpace(o.Issuer))
     .Validate(o => !string.IsNullOrWhiteSpace(o.Audience))
     .Validate(o => !string.IsNullOrWhiteSpace(o.Key))
     .ValidateOnStart();
-
+    
 builder.Services
     .AddOptions<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme)
     .Configure<IOptions<JwtOptions>>(JwtExtensions.ConfigureJwtBearerValidation);
