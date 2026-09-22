@@ -1,33 +1,66 @@
-using System;
-using GeradorCertificados.Aplicacao.DTOs;
+using GeradorCertificados.Aplicacao.Modulos.Cursos;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GeradorCertificados.WebApi.Modulos.Cursos;
 
 [ApiController]
-[Route("api/Curso")]
-public class CursoController : ControllerBase
+[Route("cursos")]
+public sealed class CursosController(IMediator mediator) : ControllerBase
 {
-
-    [HttpGet]
-    public ActionResult SelecionarTodos()
+    [HttpPost]
+    [ProducesResponseType<CadastrarCursoResponse>(StatusCodes.Status201Created)]
+    public async Task<ActionResult<CadastrarCursoResponse>> Cadastrar(
+        CadastrarCursoRequest request,
+        CancellationToken cancellationToken
+    )
     {
+        var resultado = await mediator.Send(
+            new CadastrarCursoCommand(
+                request.Nome,
+                request.Descricao,
+                request.CargaHoraria,
+                request.DataConclusao
+            ),
+            cancellationToken
+        );
 
-        return StatusCode(200);
+        if (resultado.IsFailed)
+            return BadRequest(resultado.Errors);
+
+        return CreatedAtAction(
+            nameof(ObterPorId),
+            new { cursoId = resultado.Value },
+            new CadastrarCursoResponse(
+                resultado.Value,
+                request.Nome
+            )
+        );
     }
 
-    // [HttpPost]
-    // public ActionResult Cadastrar(CadastrarCursoRequest req)
-    // {
-    //     var dto = new CadastrarCursoDto(req.Nome, req.Descricao, req.CargaHoraria, req.DataConclusao);
+    [HttpGet("{cursoId:guid}")]
+    [ProducesResponseType<CursoResponse>(StatusCodes.Status200OK)]
+    public async Task<ActionResult<CursoResponse>> ObterPorId(
+        Guid cursoId,
+        CancellationToken cancellationToken
+    )
+    {
+        var resultado = await mediator.Send(
+            new ObterCursoPorIdQuery(cursoId),
+            cancellationToken
+        );
 
-    //     var resultado = servicoCurso.Cadastrar(dto);
+        if (resultado.IsFailed)
+            return NotFound(resultado.Errors);
 
-    //     if (resultado.IsFailed)
-    //         return BadRequest();
+        var curso = resultado.Value;
 
-    //     var res = new CadastrarCursoResponse(resultado.Value);
-
-    //     return Created("/api/Cursos");
-    // }
+        return Ok(new CursoResponse(
+            curso.Id,
+            curso.Nome,
+            curso.Descricao,
+            curso.CargaHoraria,
+            curso.DataConclusao
+        ));
+    }
 }
