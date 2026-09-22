@@ -43,14 +43,23 @@ public static class DependencyInjection
         .AddEntityFrameworkStores<GeradorCertificadosDbContext>();
 
         services.AddDbContext<GeradorCertificadosDbContext>(options =>
-        {
-            var connection = configuration.GetConnectionString("SqlServer");
+    {
+        var connection = configuration.GetConnectionString("SqlServer");
 
-            if (string.IsNullOrWhiteSpace(connection))
-                throw new InvalidOperationException("Connection string \"SqlServer\" não configura.");
-                
-            options.UseSqlServer(connection);
+        if (string.IsNullOrWhiteSpace(connection))
+            throw new InvalidOperationException(
+                "Connection string \"SqlServer\" não foi encontrada."
+            );
+
+        options.UseSqlServer(connection, sqlOptions =>
+        {
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        );
         });
+    });
 
         //Uso de Postgres
 
