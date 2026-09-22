@@ -1,5 +1,3 @@
-using System;
-
 namespace GeradorCertificados.WebApi.Modulos.Cursos;
 
 public sealed record CadastrarCursoRequest(
@@ -14,3 +12,10 @@ public sealed record CadastrarCursoResponse(
     string Nome
 );
 
+public sealed record CursoResponse(
+    Guid Id,
+    string Nome,
+    string? Descricao,
+    uint? CargaHoraria,
+    DateTime? DataConclusao
+);
