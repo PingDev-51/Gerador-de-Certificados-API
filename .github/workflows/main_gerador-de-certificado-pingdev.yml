@@ -93,14 +93,14 @@ jobs:
         shell: pwsh
         run: |
           az webapp config appsettings set `
-            --resource-group "ControleDeBarPingDev" `
-            --name "PingDevBar" `
+            --resource-group "GeradorDeCertificados " `
+            --name "GeradorDeCertificados" `
             --settings `
               "ConnectionStrings__SqlServer=${{ secrets.SQLSERVER_CONNECTIONSTRING}}" `
               "ConnectionStrings__RabbitMq=${{ secrets.RABBITMQ_CONNECTIONSTRING}}" `
               "Jwt_SigningKey=${{ secrets.JWT_SIGNING_KEY }}" `
               "Infra__NewRelic__LicenseKey=${{ secrets.NEWRELIC_LICENSE_KEY }}" `
-              "LuckyPenny_LicenseKey=${{ secrets.LUCKYPENNY_LICENSE_KEY }}
+              "LuckyPenny_LicenseKey=${{ secrets.LUCKYPENNY_LICENSE_KEY }}"
         
 
       - name: Deploy to Azure Web App
