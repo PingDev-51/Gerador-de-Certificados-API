@@ -1,5 +1,6 @@
 using System;
 using FluentResults;
+using GeradorCertificados.Dominio.Modulos.Cursos;
 using MediatR;
 
 namespace GeradorCertificados.Aplicacao.Modulos.Cursos;
@@ -20,6 +21,25 @@ public sealed class CadastrarCursoCommandHandler(
         CancellationToken cancellationToken = default
     )
     {
-        // ...
+        var curso = new Curso(
+            command.Nome,
+            command.CargaHoraria,
+            command.DataConclusao,
+            command.Descricao
+        );
+
+        var erros = curso.Validar();
+
+        if (erros.Count > 0)
+        {
+            // tratar erros
+        }
+
+        await repositorioCurso.CadastrarAsync(
+            curso,
+            cancellationToken
+        );
+
+        return Result.Ok(curso.Id);
     }
 }
