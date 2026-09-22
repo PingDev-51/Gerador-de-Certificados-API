@@ -1,5 +1,6 @@
 using FluentResults;
 using GeradorCertificados.Aplicacao.Modulos.Cursos.Util;
+using GeradorCertificados.Dominio.Compartilhado.Auth;
 using GeradorCertificados.Dominio.Modulos.Cursos;
 using MediatR;
 
@@ -13,7 +14,8 @@ public sealed record CadastrarCursoCommand(
 ) : IRequest<Result<Guid>>;
 
 public sealed class CadastrarCursoCommandHandler(
-    IRepositorioCurso repositorioCurso
+    IRepositorioCurso repositorioCurso,
+    IProvedorDeUsuario provedorDeUsuario
 ) : IRequestHandler<CadastrarCursoCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(
@@ -21,6 +23,9 @@ public sealed class CadastrarCursoCommandHandler(
         CancellationToken cancellationToken = default
     )
     {
+        if (!provedorDeUsuario.Id.HasValue)
+            return Result.Fail("Usuário não autenticado.");
+
         var curso = new Curso(
             command.Nome,
             command.CargaHoraria,
@@ -28,12 +33,12 @@ public sealed class CadastrarCursoCommandHandler(
             command.Descricao
         );
 
+        curso.UsuarioId = provedorDeUsuario.Id.Value;
+
         var erros = curso.Validar();
 
         if (erros.Count > 0)
-        {
             return Result.Fail(ErrosDeCurso.Validacao(erros));
-        }
 
         await repositorioCurso.CadastrarAsync(
             curso,
