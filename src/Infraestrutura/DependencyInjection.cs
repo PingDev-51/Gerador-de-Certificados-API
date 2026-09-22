@@ -2,11 +2,8 @@ using GeradorCertificados.Dominio.Compartilhado.Auth;
 using GeradorCertificados.Dominio.Modulos.Cursos;
 using GeradorCertificados.Infraestrutura.Compartilhado.Auth;
 using GeradorCertificados.Infraestrutura.Compartilhado.Orm;
-<<<<<<< HEAD
-using GeradorCertificados.Infraestrutura.Modulos.GeracaoCertificados;
-=======
 using GeradorCertificados.Infraestrutura.Modulos.Cursos;
->>>>>>> ModuloCurso
+using GeradorCertificados.Infraestrutura.Modulos.GeracaoCertificados;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

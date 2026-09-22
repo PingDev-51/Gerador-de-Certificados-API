@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GeradorCertificados.Infraestrutura.Orm.Migrations
 {
     [DbContext(typeof(GeradorCertificadosDbContext))]
-    [Migration("20260921233118_Add_Migrations")]
+    [Migration("20260922104636_Add_Migrations")]
     partial class Add_Migrations
     {
         /// <inheritdoc />
@@ -24,6 +24,35 @@ namespace GeradorCertificados.Infraestrutura.Orm.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("GeradorCertificados.Dominio.Modulos.Cursos.Curso", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<long>("CargaHoraria")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("DataConclusao")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<Guid>("UsuarioId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TB_Curso", (string)null);
+                });
 
             modelBuilder.Entity("GeradorCertificados.Dominio.Modulos.GeracaoCertificado.Certificado", b =>
                 {
@@ -96,33 +125,6 @@ namespace GeradorCertificados.Infraestrutura.Orm.Migrations
                     b.HasIndex("CursoId", "Status");
 
                     b.ToTable("TBSolicitacoesCertificados", (string)null);
-                });
-
-            modelBuilder.Entity("GeradorCertificados.Dominio.Modulos.ModuloCurso.Curso", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<long?>("CargaHoraria")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DataConclusao")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Descricao")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("UsuarioId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Curso");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -331,7 +333,7 @@ namespace GeradorCertificados.Infraestrutura.Orm.Migrations
 
             modelBuilder.Entity("GeradorCertificados.Dominio.Modulos.GeracaoCertificado.SolicitacaoCertificados", b =>
                 {
-                    b.HasOne("GeradorCertificados.Dominio.Modulos.ModuloCurso.Curso", null)
+                    b.HasOne("GeradorCertificados.Dominio.Modulos.Cursos.Curso", null)
                         .WithMany()
                         .HasForeignKey("CursoId")
                         .OnDelete(DeleteBehavior.Restrict)

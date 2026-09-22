@@ -1,5 +1,5 @@
+using GeradorCertificados.Dominio.Modulos.Cursos;
 using GeradorCertificados.Dominio.Modulos.GeracaoCertificado;
-using GeradorCertificados.Dominio.Modulos.ModuloCurso;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

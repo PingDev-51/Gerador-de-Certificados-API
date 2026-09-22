@@ -59,14 +59,14 @@ public class SolicitacaoCertificados : EntidadeBase<SolicitacaoCertificados>
     public void MarcarComoConcluida(string caminhoZip)
     {
         CaminhoZip = caminhoZip;
-        DataConclusao = DateTime.Now;
+        DataConclusao = DateTime.UtcNow;
         Status = StatusGeracaoCertificados.Concluido;
     }
 
     public void MarcarComoFalha()
     {
         Status = StatusGeracaoCertificados.Falha;
-        DataConclusao = DateTime.Now;
+        DataConclusao = DateTime.UtcNow;
     }
 
     public bool EstaProcessando()

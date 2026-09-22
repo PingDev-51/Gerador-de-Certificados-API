@@ -22,7 +22,6 @@ public class Curso : EntidadeBase<Curso>, IEntidadeDeUsuario
         Descricao = descricao;
     }
 
-    public Curso() { }
 
     public override void Atualizar(Curso entidadeAtualizada)
     {

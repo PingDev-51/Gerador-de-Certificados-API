@@ -1,8 +1,8 @@
 using FluentAssertions;
 using GeradorCertificados.Aplicacao.Modulos.GeracaoCertificado;
 using GeradorCertificados.Aplicacao.Modulos.GeracaoCertificado.Mensageria;
+using GeradorCertificados.Dominio.Modulos.Cursos;
 using GeradorCertificados.Dominio.Modulos.GeracaoCertificado;
-using GeradorCertificados.Dominio.Modulos.ModuloCurso;
 using MassTransit;
 using Moq;
 
