@@ -59,4 +59,39 @@ public class GerarCertificadoCommandHandlerTests
             Times.Once
         );
     }
+
+    [TestMethod]
+    public async Task DeveFalharQuandoCertificadoNaoExistir()
+    {
+        var repositorio = new Mock<IRepositorioCertificados>();
+
+        repositorio
+            .Setup(x => x.SelecionarPorIdAsync(
+                It.IsAny<Guid>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Certificado?)null);
+
+        var geradorPdf = new Mock<GeradorPdfCertificao>();
+
+        var handler = new GerarCertificadoCommandHandler(
+            repositorio.Object,
+            geradorPdf.Object
+        );
+
+        var resultado = await handler.Handle(
+            new GerarCertificadoCommand(Guid.NewGuid()),
+            CancellationToken.None
+        );
+
+        resultado.IsFailed.Should().BeTrue();
+
+        geradorPdf.Verify(
+            x => x.Gerar(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<uint>(),
+                It.IsAny<DateTime>()),
+            Times.Never
+        );
+    }
 }
