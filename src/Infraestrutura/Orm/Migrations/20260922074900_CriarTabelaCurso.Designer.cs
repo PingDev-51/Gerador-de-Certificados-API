@@ -3,6 +3,7 @@ using System;
 using GeradorCertificados.Infraestrutura.Compartilhado.Orm;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace GeradorCertificados.Infraestrutura.Orm.Migrations
 {
     [DbContext(typeof(GeradorCertificadosDbContext))]
-    partial class GeradorCertificadosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260922074900_CriarTabelaCurso")]
+    partial class CriarTabelaCurso
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
