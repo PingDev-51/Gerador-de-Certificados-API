@@ -109,10 +109,10 @@ if (app.Environment.IsDevelopment())
     var dbContext = scope.ServiceProvider.GetRequiredService<GeradorCertificadosDbContext>();
 
     dbContext.Database.Migrate();
-
-    app.UseSwagger();
-    app.UseSwaggerUI();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseExceptionHandler();
 app.UseStatusCodePages();
